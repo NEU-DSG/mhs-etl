@@ -8,7 +8,8 @@ import requests
 
 def pull_index(edition, credentials):
     ''' Pulls the list of XML documents from a particular edition '''
-    r = requests.get(f'https://dsg.xmldb-dev.northeastern.edu/basex/rest/psc/{edition}', auth=(credentials['username'],credentials['password']))
+    r = requests.get(f'https://dsg.xmldb-dev.northeastern.edu/basex/rest/psc/{edition}',
+                      auth=(credentials['username'],credentials['password']), timeout=10)
     return r.text
 
 def pull_edition(edition, index, credentials, folder):
@@ -17,8 +18,9 @@ def pull_edition(edition, index, credentials, folder):
     namespaces = {'ns': 'http://basex.org/rest'}
     resource_files = tree.xpath('//ns:resource/text()', namespaces=namespaces)
     for resource in resource_files:
-        r = requests.get(f'https://dsg.xmldb-dev.northeastern.edu/basex/rest/psc/{edition}/{resource}', auth=(credentials['username'], credentials['password']))
-        with open(folder + resource, 'w') as f:
+        r = requests.get(f'https://dsg.xmldb-dev.northeastern.edu/basex/rest/psc/{edition}/{resource}',
+                          auth=(credentials['username'], credentials['password']), timeout=10)
+        with open(folder + resource, 'w', encoding='utf-8') as f:
             f.write(r.text)
 
 
@@ -59,7 +61,6 @@ def main():
             os.makedirs(folder, exist_ok=True)
             index = pull_index(edition, credentials)
             pull_edition(edition, index, credentials, folder)
-    
 
 if __name__ == "__main__":
     main()
