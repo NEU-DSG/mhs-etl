@@ -13,7 +13,7 @@ def pull_index(edition, credentials):
     return r.text
 
 def pull_edition(edition, index, credentials, folder):
-    ''' Pulls all the edition's XML documents'''
+    ''' Pulls all the edition's XML documents '''
     tree = etree.fromstring(index)
     namespaces = {'ns': 'http://basex.org/rest'}
     resource_files = tree.xpath('//ns:resource/text()', namespaces=namespaces)
@@ -49,7 +49,7 @@ def main():
         for edition in ['jqa', 'cms', 'rbt', 'esr']:
             print(f"Fetching edition: {edition}")
             current_date = datetime.now().strftime("%m-%d-%y")
-            folder = 'pulls/' + edition + '-' + current_date + '/'
+            folder = 'data/extract/' + edition + '-' + current_date + '/'
             os.makedirs(folder, exist_ok=True)
             index = pull_index(edition, credentials)
             pull_edition(edition, index, credentials, folder)
@@ -57,7 +57,7 @@ def main():
         print(f"Fetching edition(s): {', '.join(args.editions)}")
         for edition in args.editions:
             current_date = datetime.now().strftime("%m-%d-%y")
-            folder = 'pulls/' + edition + '-' + current_date + '/'
+            folder = 'data/extract/' + edition + '-' + current_date + '/'
             os.makedirs(folder, exist_ok=True)
             index = pull_index(edition, credentials)
             pull_edition(edition, index, credentials, folder)
