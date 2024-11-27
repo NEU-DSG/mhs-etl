@@ -6,9 +6,9 @@ import numpy as np
 
 # Import project-specific functions.
 
-from ..helper_scripts import jqa_xml_parser as jqa_parser
-from ..helper_scripts.network_helper_utils import createGraphObject
-from ..helper_scripts.read_write_helper_utils import grab_files_month, save, network_add_names
+from ...helper_scripts import jqa_xml_parser as jqa_parser
+from ...helper_scripts.network_helper_utils import createGraphObject
+from ...helper_scripts.read_write_helper_utils import grab_files_month, save, network_add_names
 
 def create_dataframe(files, log):
     '''Builds dataframe from the files list.'''
