@@ -6,15 +6,15 @@ import numpy as np
 
 # Import project-specific functions.
 
-from utils import jqa_xml_parser as jqa_parser
-from utils.network_helper_utils import createGraphObject
-from utils.read_write_helper_utils import grab_files_month, save, network_add_names
+from etl.utils.jqa_xml_parser import build_dataframe
+from etl.utils.network_helper_utils import createGraphObject
+from etl.utils.read_write_helper_utils import grab_files_month, save, network_add_names
 
 def create_dataframe(files, log):
     '''Builds dataframe from the files list.'''
     # Build dataframe from XML files.
     # build_dataframe() called from Correspondence_XML_parser
-    df = jqa_parser.build_dataframe(files)
+    df = build_dataframe(files)
     print("Number of Entries: ", num_entries := str(len(df)))
     log['num_entries'] = num_entries
     print("Average Length of Entry: ", avg_entry_length := str(df['text'].apply(len).mean()))
@@ -59,15 +59,15 @@ def create_adj_matrix(df, weight):
 def network_transform(args):
     ''' Function to run transform '''
     log = {}
-    log['start_month_year'] = args.start_month_year
-    log['end_month_year'] = args.end_month_year
-    log['weight_min'] = str(int(args.weight))
+    log['start_month_year'] = args['start_month_year']
+    log['end_month_year'] = args['end_month_year']
+    log['weight_min'] = str(int(args['weight']))
     print('Grabbing files')
-    files = grab_files_month(args.folder, args.start_month_year, args.end_month_year)  
+    files = grab_files_month(args['folder'], args['start_month_year'], args['end_month_year'])  
     print('Creating Dataframe')
     df = create_dataframe(files, log)
     print('Creating Adjacency Matrix')
-    df_graph = create_adj_matrix(df, args.weight)
+    df_graph = create_adj_matrix(df, args['weight'])
     print('Creating Graph Object')
     start_time = time.time()
     data = createGraphObject(df_graph, log)
@@ -77,7 +77,7 @@ def network_transform(args):
     print('Saving data as json')
     metric = {}
     metric['metrics'] = log
-    save(data, metric, args.filename)
+    save(data, metric, args['filename'])
 
 
 def main():
@@ -103,7 +103,7 @@ def main():
         help='Weight of filter for edges'
     )
     args = parser.parse_args()
-    network_transform(args)
+    network_transform(vars(args))
 
 if __name__ == "__main__":
     main()

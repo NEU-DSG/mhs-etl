@@ -1,14 +1,10 @@
 ''' File for computing subject headings '''
 import argparse
-from operator import itemgetter
 import pandas as pd
 import numpy as np
-import networkx as nx
-from networkx.algorithms import community
-from networkx.readwrite import json_graph
+
 from utils.jqa_xml_parser import build_dataframe
 from utils.cms_rbt_parser import build_dataframe as correspondence_build_dataframe
-from utils.network_helper_utils import createGraphObject
 from utils.read_write_helper_utils import grab_files_onefolder, save
 
 def create_dataframe(files, jqa):
