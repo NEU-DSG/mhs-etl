@@ -67,7 +67,7 @@ def network_add_names(data):
     not, we call the PSC names database API to fill in the names and add it to the json.
     '''
     # Open idtoname json and load it.
-    with open('../data/idtoname.json', 'r', encoding='utf-8') as f:
+    with open('data/idtoname.json', 'r', encoding='utf-8') as f:
         d = json.load(f)
     # Iterate over all of the nodes
     for node in data['nodes']:
@@ -116,5 +116,5 @@ def network_add_names(data):
             except requests.exceptions.RequestException as e:
                 raise SystemExit(e) from e
     # Write out to the json
-    with open('../data/idtoname.json', 'w', encoding='utf-8') as f:
+    with open('data/idtoname.json', 'w', encoding='utf-8') as f:
         json.dump(d, f)
