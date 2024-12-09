@@ -59,11 +59,11 @@ def create_adj_matrix(df, weight):
 def network_transform(args):
     ''' Function to run transform '''
     log = {}
-    log['start_month_year'] = args['start_month_year']
-    log['end_month_year'] = args['end_month_year']
+    log['start_month_year'] = args['start']
+    log['end_month_year'] = args['end']
     log['weight_min'] = str(int(args['weight']))
     print('Grabbing files')
-    files = grab_files_month(args['folder'], args['start_month_year'], args['end_month_year'])  
+    files = grab_files_month(args['input'], args['start'], args['end'])  
     print('Creating Dataframe')
     df = create_dataframe(files, log)
     print('Creating Adjacency Matrix')
@@ -77,7 +77,7 @@ def network_transform(args):
     print('Saving data as json')
     metric = {}
     metric['metrics'] = log
-    save(data, metric, args['filename'])
+    save(data, metric, args['output'])
 
 
 def main():
