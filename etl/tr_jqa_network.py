@@ -15,12 +15,14 @@ def create_dataframe(files, log):
     # Build dataframe from XML files.
     # build_dataframe() called from Correspondence_XML_parser
     df = build_dataframe(files)
+    # df.to_csv("debug/build.csv")
     print("Number of Entries: ", num_entries := str(len(df)))
     log['num_entries'] = num_entries
     print("Average Length of Entry: ", avg_entry_length := str(df['text'].apply(len).mean()))
     log['avg_entry_len'] = avg_entry_length
     # Unnest people. 
     df['people'] = df['people'].str.split(r',|;')
+    # df.to_csv("debug/split.csv")
     print("Average Num of People Mentioned per Entry ", \
           pers_ref_avg := str(df['people'].apply(len).mean()))
     log['pers_ref_avg'] = pers_ref_avg
@@ -43,9 +45,11 @@ def create_adj_matrix(df, weight):
 
     # Create adjacency matrix.
     adj = pd.crosstab(df['entry'], df['people'])
+    # adj.to_csv("debug/adj.csv")
 
     # Convert entry-person matrix into an adjacency matrix of persons.
     adj = adj.T.dot(adj)
+    # adj.to_csv("debug/dot.csv")
 
     # Change same-same connections to zero.
     np.fill_diagonal(adj.values, 0)
@@ -107,3 +111,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
