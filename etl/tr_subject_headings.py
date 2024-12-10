@@ -3,9 +3,9 @@ import argparse
 import pandas as pd
 import numpy as np
 
-from utils.jqa_xml_parser import build_dataframe
-from utils.cms_rbt_parser import build_dataframe as correspondence_build_dataframe
-from utils.read_write_helper_utils import grab_files_onefolder, save
+from etl.utils.jqa_xml_parser import build_dataframe
+from etl.utils.cms_rbt_parser import build_dataframe as correspondence_build_dataframe
+from etl.utils.read_write_helper_utils import grab_files_onefolder, save
 
 def create_dataframe(files, jqa):
     ''' Script to build dataframe '''
@@ -13,7 +13,7 @@ def create_dataframe(files, jqa):
         df = build_dataframe(files)
     else:
         df = correspondence_build_dataframe(files)
-    df.to_csv("intermediate.csv")
+    # df.to_csv("intermediate.csv")
 
     # Unnest subject headings. 
     df['subjects'] = df['subjects'].str.split('|')
@@ -31,7 +31,7 @@ def create_dataframe(files, jqa):
     # Remove rows with empty values.
     df.replace('', np.nan, inplace = True)
     df.dropna(how='all', inplace = True)
-    df.to_csv("after_drop.csv")
+    # df.to_csv("after_drop.csv")
 
     return df
 
@@ -39,7 +39,7 @@ def subjects_by_year(df):
     ''' Calculating the subjects aggregated '''
     df['date'] = pd.to_datetime(df['date'], format = '%Y-%m-%d', errors = 'coerce')
     df = df.dropna(subset=['date']).copy() # remove Not-a-Time values.
-    df.to_csv('coerce.csv')
+    # df.to_csv('coerce.csv')
     df['month'] = df['date'].dt.month
     df['year'] = df['date'].dt.year
 
@@ -60,6 +60,12 @@ def subjects_by_year(df):
 
     return subjects
 
+def subject_creation(args):
+    files = grab_files_onefolder(args.folder)
+    df = create_dataframe(files, False)
+    subjects = subjects_by_year(df)
+    # subjects.to_csv(args.csv_filename)
+
 def main():
     '''
     Main argument to parse the args and call all of the requisite functions.
@@ -73,10 +79,8 @@ def main():
         help='The output csv filename')
     args = parser.parse_args()
     print('Grabbing files')
-    files = grab_files_onefolder(args.folder)
-    df = create_dataframe(files, False)
-    subjects = subjects_by_year(df)
-    subjects.to_csv(args.csv_filename)
+    subject_creation(vars(args))
+    
 
 
 if __name__ == "__main__":

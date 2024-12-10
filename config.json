@@ -6,8 +6,9 @@
         {"input": "data/extract/jqa-11-25-24", "start": "1779-11", "end": "1794-8", "output": "data/transform/network/1779-11-1794-8.json", "weight": 3}
     ],
     "network_cms": [
-        {"input": "data/extract/cms-11-25-24", "output": "data/transform/network/cms.json", "weight": 5}
+        {"input": "data/extract/cms-11-25-24", "output": "data/transform/network/cms-ref.json", "weight": 3}
     ],
     "network_rbt": [
+        {"input": "data/extract/rbt-11-25-24", "output": "data/transform/network/rbt.json", "weight": 1}
     ]
 }
