@@ -4,9 +4,9 @@ import time
 import pandas as pd
 import numpy as np
 
-from utils.cms_rbt_parser import build_dataframe
-from utils.network_helper_utils import createGraphObject
-from utils.read_write_helper_utils import grab_files_onefolder, save, network_add_names
+from etl.utils.cms_rbt_parser import build_dataframe
+from etl.utils.network_helper_utils import createGraphObject
+from etl.utils.read_write_helper_utils import grab_files_onefolder, save, network_add_names
 
 def create_dataframe(files, log):
     '''
@@ -14,6 +14,7 @@ def create_dataframe(files, log):
     file and creates our pandas dataframe.
     '''
     df = build_dataframe(files)
+    df.to_csv("debug/build.csv")
     print("Number of Entries: "  + str(len(df)))
     print("Average Length of Entry: " + str(df['text'].apply(len).mean()))
     log['num_entries'] = str(len(df))
@@ -26,6 +27,8 @@ def create_dataframe(files, log):
 
     # Split references into list objects.
     df['references'] = df['references'].str.split(r',|;')
+    # df['target'] = df['target'].str.split(r',|;')
+    df.to_csv("debug/split.csv")
     print("Average Num of People Mentioned per Entry " + str(df['references'].apply(len).mean()))
     log['pers_ref_avg'] = str(df['references'].apply(len).mean())
 
@@ -35,16 +38,23 @@ def create_adj_matrix(df, weight):
     ''' Creates the adjacency matrix from the dataframe '''
     # Explode list so that each list value becomes a row.
     refs = df.explode('references')
+    # refs = refs.explode('target')
     refs['source'] = refs['source'].str.strip()
-    refs['target'] = refs['target'].str.strip()
+    # refs['target'] = refs['target'].str.strip()
     refs['references'] = refs['references'].str.strip()
+    refs.to_csv("explode.csv")
 
     # Create file-person matrix.
     refs = pd.crosstab(refs['file'], refs['references'])
+    refs.to_csv("debug/adj.csv")
 
     # Repeat with correspondence (source + target)
     source = pd.crosstab(df['file'], df['source'])
+    # df_target = df.explode('target')
+    # df_target['target'] = df_target['target'].str.strip()
+    # target = pd.crosstab(df_target['file'], df_target['target'])
     target = pd.crosstab(df['file'], df['target'])
+    target.to_csv("target.csv")
 
     # Sum values of sources to refs or create new column with sources' values.
     for col in source:
@@ -55,13 +65,25 @@ def create_adj_matrix(df, weight):
 
     # Repeat for targets.
     for col in target:
-        if col in refs:
-            refs[str(col)] = refs[str(col)] + target[str(col)]
+        if ';' in col:
+            print("HEEEREEE + ", col)
+            cols = [item.strip() for item in col.split(';')]
+            print(cols)
+            for columns in cols:
+                print("NEW", columns)
+                if columns in refs:
+                    refs[str(columns)] = refs[str(columns)] + target[str(columns)]
+                else:
+                    refs[str(columns)] = target[str(columns)]
         else:
-            refs[str(col)] = target[str(col)]
+            if col in refs:
+                refs[str(col)] = refs[str(col)] + target[str(col)]
+            else:
+                refs[str(col)] = target[str(col)]
 
     # Convert entry-person matrix into an adjacency matrix of persons.
     refs = refs.T.dot(refs)
+    refs.to_csv("debug/dot.csv")
 
     # # Change diagonal values to zero. That is, a person cannot co-occur with themself.
     np.fill_diagonal(refs.values, 0)
@@ -86,13 +108,13 @@ def create_adj_matrix(df, weight):
 def network_transform(args):
     ''' Function to run network transform '''
     log = {}
-    log['weight_min'] = str(int(args.weight) + 1)
+    log['weight_min'] = str(int(args['weight']) + 1)
     print('Grabbing files')
-    files = grab_files_onefolder(args.folder)
+    files = grab_files_onefolder(args['input'])
     print('Creating Dataframe')
     df = create_dataframe(files, log)
     print('Creating Adjacency Matrix')
-    df_graph = create_adj_matrix(df, args.weight)
+    df_graph = create_adj_matrix(df, args['weight'])
     print('Creating Graph Object')
     start_time = time.time()
     data = createGraphObject(df_graph, log)
@@ -102,7 +124,7 @@ def network_transform(args):
     print('Saving data as json')
     metric = {}
     metric['metrics'] = log
-    save(data, metric, args.filename)
+    save(data, metric, args['output'])
 
 def main():
     '''
@@ -120,7 +142,7 @@ def main():
         'weight',
         help='Weight of filter for edges')
     args = parser.parse_args()
-    network_transform(args)
+    network_transform(vars(args))
 
 if __name__ == "__main__":
     main()
