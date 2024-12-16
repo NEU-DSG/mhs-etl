@@ -12,7 +12,7 @@ jobs:
     - name: Copy data folder to temp folder
       run: |
         mkdir temp-folder
-        cp data/transform temp-folder/
+        cp mhs-etl/data/transform/ temp-folder/
 
     - name: Checkout mhs-web repo
       uses: actions/checkout@v3
