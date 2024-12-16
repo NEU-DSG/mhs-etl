@@ -7,9 +7,9 @@ from etl.utils.jqa_xml_parser import build_dataframe
 from etl.utils.cms_rbt_parser import build_dataframe as correspondence_build_dataframe
 from etl.utils.read_write_helper_utils import grab_files_onefolder, save
 
-def create_dataframe(files, jqa):
+def create_dataframe(files, edition):
     ''' Script to build dataframe '''
-    if jqa:
+    if edition == 'jqa':
         df = build_dataframe(files)
     else:
         df = correspondence_build_dataframe(files)
@@ -61,10 +61,11 @@ def subjects_by_year(df):
     return subjects
 
 def subject_creation(args):
-    files = grab_files_onefolder(args.folder)
-    df = create_dataframe(files, False)
+    ''' Function for creating subjects '''
+    files = grab_files_onefolder(args['input'])
+    df = create_dataframe(files, args['edition'])
     subjects = subjects_by_year(df)
-    # subjects.to_csv(args.csv_filename)
+    subjects.to_csv(args['output'])
 
 def main():
     '''

@@ -10,5 +10,18 @@
     ],
     "network_rbt": [
         {"input": "data/extract/rbt-11-25-24", "output": "data/transform/network/rbt.json", "weight": 1}
+    ],
+    "subjects": [
+        {"input": "data/extract/jqa-11-25-24", "edition": "jqa", "output": "data/transform/subject/jqa_subjects.csv"},
+        {"input": "data/extract/cms-11-25-24", "edition": "cms", "output": "data/transform/subject/cms_subjects.csv"},
+        {"input": "data/extract/rbt-11-25-24", "edition": "rbt", "output": "data/transform/subject/rbt_subjects.csv"}
+    ],
+    "topics": [
+        {"input": "data/transform/subject/", "umbrella_to_topic_file": "data/transform/subject/umbrella_to_topic.json", "topic_to_umbrella_file": "data/transform/subject/topic_to_umbrella.json"}
+    ],
+    "timeline_util": [
+        {"input": "data/transform/subject/jqa_subjects.csv", "output": "data/transform/subject/output/output.csv", "data_file": "data/transform/subject/jqa_subjects.csv", "color_file": "data/transform/subject/jqa_color_file.csv", "umbrella_file": "data/transform/subject/umbrella_to_topic.json", "topic_category_file": "data/transform/subject/topic_to_umbrella.json"}
     ]
+    
+    
 }

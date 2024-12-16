@@ -5,6 +5,8 @@ from pathlib import Path
 import argparse
 import certifi
 
+
+
 def writeJSON(input_dict, output_filepath):
     """
     Writes a python dictionary to a specified JSON filepath
@@ -92,6 +94,12 @@ def create_topic_to_umbrellas(umbrella_to_topic_dict):
             topics_umbrellas.setdefault(topic, []).append(umbrella)
     return topics_umbrellas
 
+def create_topics(args):
+    umbrella_to_topic_dict = create_umbrella_to_topics(args['input'])
+    topic_to_umbrellas_dict = create_topic_to_umbrellas(umbrella_to_topic_dict)
+    writeJSON(umbrella_to_topic_dict, args['umbrella_to_topic_file'])
+    writeJSON(topic_to_umbrellas_dict, args['topic_to_umbrella_file'])
+
 def main():
     parser = argparse.ArgumentParser(description="Create umbrella topic mappings from API and CSV data.")
     parser.add_argument('folder', help='Folder containing CSV data files.')
@@ -99,10 +107,8 @@ def main():
     parser.add_argument('topic_umbrella', help='Output file for topic to umbrella file.')
 
     args = parser.parse_args()
-    umbrella_to_topic_dict = create_umbrella_to_topics(args.folder)
-    topic_to_umbrellas_dict = create_topic_to_umbrellas(umbrella_to_topic_dict)
-    writeJSON(umbrella_to_topic_dict, args.umbrella_topic)
-    writeJSON(topic_to_umbrellas_dict, args.topic_umbrella)
+    create_topics(vars(args))
+    
 
 if __name__ == "__main__":
     main()
