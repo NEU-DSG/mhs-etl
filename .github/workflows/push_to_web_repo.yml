@@ -11,6 +11,7 @@ jobs:
 
     - name: Copy data folder to temp folder
       run: |
+        ls -alh
         mkdir temp-folder
         cp -r data temp-folder/
 
