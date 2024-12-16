@@ -31,15 +31,15 @@ jobs:
 
     - name: Move files to mhs-web
       run: |
-        cp temp-folder/transform/network/jqa/* mhs-web/src/data/JQA/coref/
-        cp temp-folder/transform/network/cms/cms.json mhs-web/src/data/CMS/coref/data.json
-        cp temp-folder/transform/network/rbt/rbt.json mhs-web/src/data/RBT/coref/data.json
-        cp temp-folder/transform/subject/color/jqa_color_file.csv mhs-web/src/data/JQA/timeline/sortedcolors.csv
-        cp temp-folder/transform/subject/color/cms_color_file.csv mhs-web/src/data/CMS/timeline/sortedcolors.csv
-        cp temp-folder/transform/subject/color/rbt_color_file.csv mhs-web/src/data/RBT/timeline/sortedcolors.csv
-        cp temp-folder/transform/subject/output/jqa_output.csv mhs-web/src/data/JQA/timeline/sortedtimeline.csv
-        cp temp-folder/transform/subject/output/cms_output.csv mhs-web/src/data/CMS/timeline/sortedtimeline.csv
-        cp temp-folder/transform/subject/output/rbt_output.csv mhs-web/src/data/RBT/timeline/sortedtimeline.csv
+        cp temp-folder/data/transform/network/jqa/* mhs-web/src/data/JQA/coref/
+        cp temp-folder/data/transform/network/cms/cms.json mhs-web/src/data/CMS/coref/data.json
+        cp temp-folder/data/transform/network/rbt/rbt.json mhs-web/src/data/RBT/coref/data.json
+        cp temp-folder/data/transform/subject/color/jqa_color_file.csv mhs-web/src/data/JQA/timeline/sortedcolors.csv
+        cp temp-folder/data/transform/subject/color/cms_color_file.csv mhs-web/src/data/CMS/timeline/sortedcolors.csv
+        cp temp-folder/data/transform/subject/color/rbt_color_file.csv mhs-web/src/data/RBT/timeline/sortedcolors.csv
+        cp temp-folder/data/transform/subject/output/jqa_output.csv mhs-web/src/data/JQA/timeline/sortedtimeline.csv
+        cp temp-folder/data/transform/subject/output/cms_output.csv mhs-web/src/data/CMS/timeline/sortedtimeline.csv
+        cp temp-folder/data/transform/subject/output/rbt_output.csv mhs-web/src/data/RBT/timeline/sortedtimeline.csv
         cd mhs-web
         git config user.name ${{ secrets.USERNAME_GITHUB }}
         git config user.email ${{ secrets.EMAIL_GITHUB }}
