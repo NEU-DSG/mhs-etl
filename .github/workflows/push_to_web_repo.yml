@@ -1,0 +1,47 @@
+name: push_to_web_repo
+
+on: workflow_dispatch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Source repo
+      uses: actions/checkout@v3
+
+    - name: Copy data folder to temp folder
+      run: |
+        mkdir temp-folder
+        cp data/transform temp-folder/
+
+    - name: Checkout mhs-web repo
+      uses: actions/checkout@v3
+      with:
+        repository: NEU-DSG/mhs-web
+        token: ${{ secrets.PAT_GITHUB }}
+        path: mhs-web
+    
+    - name: Checkout dev branch of ggt-web
+      run: |
+        cd mhs-web
+        git fetch origin
+        git checkout development
+        git pull origin development
+
+    - name: Move files to mhs-web
+      run: |
+        cp temp-folder/transform/network/jqa/* mhs-web/src/data/JQA/coref/
+        cp temp-folder/transform/network/cms/cms.json mhs-web/src/data/CMS/coref/data.json
+        cp temp-folder/transform/network/rbt/rbt.json mhs-web/src/data/RBT/coref/data.json
+        cp temp-folder/transform/subject/color/jqa_color_file.csv mhs-web/src/data/JQA/timeline/sortedcolors.csv
+        cp temp-folder/transform/subject/color/cms_color_file.csv mhs-web/src/data/CMS/timeline/sortedcolors.csv
+        cp temp-folder/transform/subject/color/rbt_color_file.csv mhs-web/src/data/RBT/timeline/sortedcolors.csv
+        cp temp-folder/transform/subject/output/jqa_output.csv mhs-web/src/data/JQA/timeline/sortedtimeline.csv
+        cp temp-folder/transform/subject/output/cms_output.csv mhs-web/src/data/CMS/timeline/sortedtimeline.csv
+        cp temp-folder/transform/subject/output/rbt_output.csv mhs-web/src/data/RBT/timeline/sortedtimeline.csv
+        cd mhs-web
+        git config user.name ${{ secrets.USERNAME_GITHUB }}
+        git config user.email ${{ secrets.EMAIL_GITHUB }}
+        git add .
+        git commit -m "Moved files from mhs-etl to mhs-web development branch"
+        git push origin development
