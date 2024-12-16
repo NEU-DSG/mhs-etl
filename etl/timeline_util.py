@@ -246,12 +246,12 @@ def timeline_data_creation(args):
     # Right now, just taking the first umbrella for a certain topic
     sub_dict = create_sub_dict(args['input'])
     create_timelines(sub_dict, args['output'], umbs, json_categories)
-    getcolors(args['data_file'], args['color_file'], colors, umbs, json_categories)
+    getcolors(args['output'], args['color_file'], colors, umbs, json_categories)
 
 def main():
     parser = argparse.ArgumentParser(description="Generate timeline data and colors.")
     parser.add_argument('input', type=str, help='Input CSV file with subjects and years.')
-    parser.add_argument('datafile', type=str, help='Output CSV file for timeline data.')
+    parser.add_argument('output', type=str, help='Output CSV file for timeline data.')
     parser.add_argument('colorfile', type=str, help='Output CSV file for color mapping.')
     parser.add_argument('umbrella_file', type=str, help='Input CSV file for the umbrella file.')
     parser.add_argument('topic_category_file', type=str, help='Input CSV file for the topiccategory file.')

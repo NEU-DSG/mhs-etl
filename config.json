@@ -3,7 +3,13 @@
         {"editions": ["esr"]}
     ],
     "network_jqa": [
-        {"input": "data/extract/jqa-11-25-24", "start": "1779-11", "end": "1794-8", "output": "data/transform/network/1779-11-1794-8.json", "weight": 3}
+        {"input": "data/extract/jqa-11-25-24", "start": "1779-11", "end": "1794-8", "output": "data/transform/network/1779-11-1794-8.json", "weight": 3},
+        {"input": "data/extract/jqa-11-25-24", "start": "1794-9", "end": "1809-7", "output": "data/transform/network/1794-9-1809-7.json", "weight": 6},
+        {"input": "data/extract/jqa-11-25-24", "start": "1809-8", "end": "1817-8", "output": "data/transform/network/1809-8-1817-8.json", "weight": 13},
+        {"input": "data/extract/jqa-11-25-24", "start": "1817-9", "end": "1825-2", "output": "data/transform/network/1817-9-1825-2.json", "weight": 13},
+        {"input": "data/extract/jqa-11-25-24", "start": "1825-3", "end": "1829-12", "output": "data/transform/network/1825-3-1829-12.json", "weight": 11},
+        {"input": "data/extract/jqa-11-25-24", "start": "1830-1", "end": "1838-12", "output": "data/transform/network/1830-1-1838-12.json", "weight": 20},
+        {"input": "data/extract/jqa-11-25-24", "start": "1839-1", "end": "1848-2", "output": "data/transform/network/1839-1-1848-2.json", "weight": 15}
     ],
     "network_cms": [
         {"input": "data/extract/cms-11-25-24", "output": "data/transform/network/cms-ref.json", "weight": 3}
@@ -20,7 +26,10 @@
         {"input": "data/transform/subject/", "umbrella_to_topic_file": "data/transform/subject/umbrella_to_topic.json", "topic_to_umbrella_file": "data/transform/subject/topic_to_umbrella.json"}
     ],
     "timeline_util": [
-        {"input": "data/transform/subject/jqa_subjects.csv", "output": "data/transform/subject/output/output.csv", "data_file": "data/transform/subject/jqa_subjects.csv", "color_file": "data/transform/subject/jqa_color_file.csv", "umbrella_file": "data/transform/subject/umbrella_to_topic.json", "topic_category_file": "data/transform/subject/topic_to_umbrella.json"}
+        {"input": "data/transform/subject/jqa_subjects.csv", "output": "data/transform/subject/output/jqa_output.csv", "color_file": "data/transform/subject/color/jqa_color_file.csv", "umbrella_file": "data/transform/subject/umbrella_to_topic.json", "topic_category_file": "data/transform/subject/topic_to_umbrella.json"},
+        {"input": "data/transform/subject/cms_subjects.csv", "output": "data/transform/subject/output/cms_output.csv", "color_file": "data/transform/subject/color/cms_color_file.csv", "umbrella_file": "data/transform/subject/umbrella_to_topic.json", "topic_category_file": "data/transform/subject/topic_to_umbrella.json"},
+        {"input": "data/transform/subject/rbt_subjects.csv", "output": "data/transform/subject/output/rbt_output.csv", "color_file": "data/transform/subject/color/rbt_color_file.csv", "umbrella_file": "data/transform/subject/umbrella_to_topic.json", "topic_category_file": "data/transform/subject/topic_to_umbrella.json"}
+
     ]
     
     
