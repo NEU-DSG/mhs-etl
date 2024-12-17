@@ -75,8 +75,6 @@ def create_sub_dict(filepath):
 
         # A list of all the years a particular subject is mentioned
         filtered_years = df['year'][df['subjects'] == subject].tolist()
-        if subject == 'American Revolution':
-            print(filtered_years)
 
         # If the subject only appears in one year, then set it as start and end date and skip loop
         if len(filtered_years) == 1:
@@ -112,6 +110,8 @@ def create_sub_dict(filepath):
         sub_dict[subject] = year_ranges
     return sub_dict
 
+    
+
 
     # The headers for the timeline
 def create_timelines(sub_dict, output, umbs, json_categories):
@@ -126,6 +126,7 @@ def create_timelines(sub_dict, output, umbs, json_categories):
                 new_line = [subject, subject, str(min(year_range)) + "-01-02", str(max(year_range)) + "-12-31"]
             csv_lines.append(new_line)
 
+    # print(csv_lines)
     # Removes headers and gets list of categories
     categories = list(set(list(category_list.values())))
     newlines = [["Role", "Name", "Start", "End"]]
@@ -149,7 +150,6 @@ def create_timelines(sub_dict, output, umbs, json_categories):
                 new = [cat[0], each[1], each[2], each[3]]
                 catlines.append(new)
             
-            print(catlines)
             formatted_union = format_union_of_date_ranges(incat, incat[0][0])
 
 
