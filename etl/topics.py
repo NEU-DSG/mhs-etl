@@ -77,7 +77,12 @@ def create_umbrella_to_topics(folder_path):
     for file in csv_files:
         topics = pd.read_csv(file)["subjects"]
         all_topics_from_csvs.update(topics)
-
+    # I believe there was an API change so now we have to manually add
+    # topics that appear in the XML files that also are umbrella topics themselves.
+    for topic in all_topics_from_csvs:
+        if topic in all_umbrellas_from_api:
+            umbrella_to_topic_dict[topic].append(topic)
+            api_topics_no_umb.remove(topic)
     # All the topics in the data
     csv_topics_no_umb = all_topics_from_csvs - set(all_topics_from_api)
 
