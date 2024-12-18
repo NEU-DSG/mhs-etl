@@ -1,6 +1,6 @@
 {
     "extract": [
-        {"editions": ["esr"]}
+        {"editions": ["all"]}
     ],
     "network_jqa": [
         {"input": "data/extract/jqa-11-25-24", "start": "1779-11", "end": "1794-8", "output": "data/transform/network/1779-11-1794-8.json", "weight": 3},
