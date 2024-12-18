@@ -20,7 +20,7 @@ Clone the repository:
 git clone https://github.com/NEU-DSG/mhs-etl
 ```
 
-Navigate to the directory and install the requirements:
+Navigate to the directory and install the requirements (in a Python virtual environment if you'd like):
 
 ```
 pip install -r requirements.txt
