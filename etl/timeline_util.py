@@ -13,7 +13,7 @@ def get_union_of_date_ranges(data):
     date_ranges = []
 
     for row in data:
-        if len(row) == 4:  # Only process rows with date ranges
+        if len(row) == 5:  # Only process rows with date ranges
             start_date = parse_date(row[2])
             end_date = parse_date(row[3])
             date_ranges.append((start_date, end_date))
@@ -29,7 +29,7 @@ def get_union_of_date_ranges(data):
     current_start, current_end = date_ranges[0]
 
     for start, end in date_ranges[1:]:
-        if start <= current_end:  # Overlapping or conscutive ranges
+        if start <= current_end:  # Overlapping or consecutive ranges
             current_end = max(current_end, end)
         else:
             merged_ranges.append((current_start, current_end))
@@ -114,22 +114,31 @@ def create_sub_dict(filepath):
 
 
     # The headers for the timeline
-def create_timelines(sub_dict, output, umbs, json_categories):
+def create_timelines(sub_dict, input_file, output, umbs, umbrella_sub, json_categories):
+    input_df = pd.read_csv(input_file)
     category_list = {key: value[0] for key, value in json_categories.items()}
     csv_lines = []
     # Gets a dict of topic : umbrella
     for subject, year_ranges in sub_dict.items():
         for year_range in year_ranges:
-            if subject in umbs:
-                new_line = ["Topic, "+subject, "Topic, "+subject, str(min(year_range)) + "-01-02", str(max(year_range)) + "-12-31"]
+            if (year_range[0] == year_range[1]):
+
+                count = input_df.loc[(input_df['year'] == year_range[0]) & (input_df['subjects'] == subject), 'count'].values[0]
+
             else:
-                new_line = [subject, subject, str(min(year_range)) + "-01-02", str(max(year_range)) + "-12-31"]
+                count = 0
+                for year in year_range:
+                    count += input_df.loc[(input_df['year'] == year) & (input_df['subjects'] == subject), 'count'].values[0]
+            if subject in umbs:
+                new_line = ["Topic, "+subject, "Topic, "+subject, str(min(year_range)) + "-01-02", str(max(year_range)) + "-12-31", count]
+            else:
+                new_line = [subject, subject, str(min(year_range)) + "-01-02", str(max(year_range)) + "-12-31", count]
             csv_lines.append(new_line)
 
     # print(csv_lines)
     # Removes headers and gets list of categories
     categories = list(set(list(category_list.values())))
-    newlines = [["Role", "Name", "Start", "End"]]
+    newlines = [["Role", "Name", "Start", "End", "Count"]]
 
     # Adds a header row for each category, followed by the relevant topics
     for cat in categories:
@@ -147,15 +156,37 @@ def create_timelines(sub_dict, output, umbs, json_categories):
 
             catlines = []
             for each in all:
-                new = [cat[0], each[1], each[2], each[3]]
+                new = [cat[0], each[1], each[2], each[3], 0]
                 catlines.append(new)
             
             formatted_union = format_union_of_date_ranges(incat, incat[0][0])
-
-
             incat[0] = formatted_union[0]
             formatted_union.pop(0)
             for entry in formatted_union:
+                if entry[1] != "Uncategorized":
+                    tops = (umbrella_sub[entry[1]])
+
+
+                    years = list(range(int(entry[2][:4]), int(entry[3][:4])+1))
+
+                    count = 0
+
+                    for top in tops:
+                        for year in years:
+
+                            matching = (input_df.loc[(input_df['year'] == year) & (input_df['subjects'] == top), 'count'].values)
+
+
+                            if len(matching) > 0:
+                                count += input_df.loc[(input_df['year'] == year) & (input_df['subjects'] == top), 'count'].values[0]
+
+                else:
+                    count = 0
+
+
+                new_entry = entry
+
+                new_entry.append(count)
                 incat.append(entry)
 
             catlines.extend(incat)
@@ -239,13 +270,13 @@ def timeline_data_creation(args):
           '#E03084']
     
     with open(args['umbrella_file'], 'r') as file:
-        umbs = json.load(file)
-    umbs = list(umbs.keys())
+        umbrella_sub = json.load(file)
+    umbs = list(umbrella_sub.keys())
     with open(args['topic_category_file'], 'r') as file:
         json_categories = json.load(file)
     # Right now, just taking the first umbrella for a certain topic
     sub_dict = create_sub_dict(args['input'])
-    create_timelines(sub_dict, args['output'], umbs, json_categories)
+    create_timelines(sub_dict, args['input'], args['output'], umbs, umbrella_sub, json_categories)
     getcolors(args['output'], args['color_file'], colors, umbs, json_categories)
 
 def main():
