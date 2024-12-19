@@ -9,6 +9,7 @@ import etl.topics as topic
 import etl.timeline_util as timeline_util
 
 def main():
+    ''' Main runner function for ETL Script '''
     with open("config.json", "r", encoding="utf-8") as f:
         parameters = json.load(f)
     parser = argparse.ArgumentParser(description="ETL Pipeline")
@@ -40,10 +41,6 @@ def main():
             topic.create_topics(params)
         for params in parameters['timeline_util']:
             timeline_util.timeline_data_creation(params)
-
-
-
-
 
 if __name__ == "__main__":
     main()
