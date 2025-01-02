@@ -12,6 +12,14 @@ In 2024, the DSG worked with the MHS to revive some of Bill Quinn's previous exp
 
 * All the development and testing for this repository was done on Mac with ARM processing chips.
 
+* You will also need a `.config` file in the root directory of the repository with the credentials for accessing the DSG database, in the format:
+
+    ```
+    [PSC]
+    USERNAME=ABC
+    PASSWORD=XYZ
+    ```
+
 ### Installation
 
 Clone the repository:
@@ -32,7 +40,7 @@ All of the extractions and transformations are run through the `main.py` file an
 
 #### Extraction
 
-Extraction is the extraction of the edition XML files from the DSG XML Database, into this repository. It is performed with the `etl/ex_dsg_db_pull.py` file. To run this file, you can use the runner to run `python3 main.py --extract`. This will take the arguments in the "extract" object of the `config.json` and create a folder with the date of the pull, including the editions specified in the `config.json` file. In the `config.json` file, you can put `["all"]` to pull all of the editions, or any arrangement of the current editions, for example `['cms', 'jqa']` if you only want to pull the `cms` and `jqa` editions.
+Extraction is the extraction of the edition XML files from the DSG XML Database into this repository. It is performed with the `etl/ex_dsg_db_pull.py` file. To run this file, you can use the runner to run `python3 main.py --extract`. This will take the arguments in the "extract" object of the `config.json` and create a folder with the date of the pull, including the editions specified in the `config.json` file. In the `config.json` file, you can put `["all"]` to pull all of the editions, or any arrangement of the current editions, for example `['cms', 'jqa']` if you only want to pull the `cms` and `jqa` editions.
 
 #### Transformation
 
