@@ -28,7 +28,14 @@ pip install -r requirements.txt
 
 ### Executing the program
 
-All of the extractions and transformations are run through the `main.py` file and the `config.json` file.
+All of the extractions and transformations are run through the `main.py` file and the `config.json` file. The `main.py` file is the main "runner" of the ETL script, and it is called with flags to run each part of the ETL script. The individual files run can be found in the `etl/` folder. The `config.json` file is the file with all of the parameters to run each parts of the ETL script. These can be altered based on the specifications within the respective files in the `etl/` folder. 
+
+#### Extraction
+
+Extraction is the extraction of the edition XML files from the DSG XML Database, into this repository. It is performed with the `etl/ex_dsg_db_pull.py` file. To run this file, you can use the runner to run `python3 main.py --extract`. This will take the arguments in the "extract" object of the `config.json` and create a folder with the date of the pull, including the editions specified in the `config.json` file. In the `config.json` file, you can put `["all"]` to pull all of the editions, or any arrangement of the current editions, for example `['cms', 'jqa']` if you only want to pull the `cms` and `jqa` editions.
+
+#### Transformation
+
 
 ## Authors
 
