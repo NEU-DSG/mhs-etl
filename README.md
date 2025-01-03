@@ -52,7 +52,11 @@ The network graph takes the XML data, extracts the `<persRef>` tags and runs a s
 
 #### Subject Timeline
 
-The subject timeline takes the editor-assigned subjects, and creates a chronological timeline that displays when those topics were being discussed in their respective entries. This can be run with the command `python3 main.py --subjects`.  
+The subject timeline takes the editor-assigned subjects, and creates a chronological timeline that displays when those topics were being discussed in their respective entries. This can be run with the command `python3 main.py --subjects`. The related scripts to this that are run in sucession are `etl/tr_subject_headings.py`, `etl/topics.py`, and `etl/timeline_util.py`. These should stay relatively the same for the parameters in the `config.json` file, apart from the initial extraction folder dates which should be edited when a new pull is run.
+
+### Loading
+
+Loading is the loading of the json and csv files into the web application. The web application can be found at [NEU-DSG/mhs-web](https://github.com/NEU-DSG/mhs-web). The loading is done through a manual Github action. This can be found at `.github/push_to_web_repo.yml`. The secrets to that action are tied to this repository, and the current username and email secrets are set up for Joel Lee, although this can be altered in the Github settings. Running this action will take all of the necessary files in the `data` folder, and copy it over to the `NEU-DSG/mhs-web` folders where they need to go. Once this is done, the ETL script is complete and the `NEU-DSG/mhs-web` repository handles the push to AWS.
 
 ## Authors
 
