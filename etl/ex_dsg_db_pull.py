@@ -8,9 +8,23 @@ import requests
 
 def pull_index(edition, credentials):
     ''' Pulls the list of XML documents from a particular edition '''
-    r = requests.get(f'https://dsg.xmldb-dev.northeastern.edu/basex/rest/psc/{edition}',
-                      auth=(credentials['username'],credentials['password']), timeout=10)
-    return r.text
+    try:
+        r = requests.get(f'https://dsg.xmldb-dev.northeastern.edu/basex/rest/psc/{edition}',
+                        auth=(credentials['username'],credentials['password']), timeout=10)
+        r.raise_for_status()
+        return r.text
+    except requests.exceptions.HTTPError as http_error:
+        print("HTTP error:", http_error)
+        raise
+    except requests.exceptions.ConnectionError as conn_error:
+        print("Connection error:", conn_error)
+        raise
+    except requests.exceptions.Timeout as time_error:
+        print("Timeout error:", time_error)
+        raise
+    except requests.exceptions.RequestException as error:
+        print("General error:", error)
+        raise
 
 def pull_edition(edition, index, credentials, folder):
     ''' Pulls all the edition's XML documents '''
@@ -18,10 +32,25 @@ def pull_edition(edition, index, credentials, folder):
     namespaces = {'ns': 'http://basex.org/rest'}
     resource_files = tree.xpath('//ns:resource/text()', namespaces=namespaces)
     for resource in resource_files:
-        r = requests.get(f'https://dsg.xmldb-dev.northeastern.edu/basex/rest/psc/{edition}/{resource}',
-                          auth=(credentials['username'], credentials['password']), timeout=10)
-        with open(folder + resource, 'w', encoding='utf-8') as f:
-            f.write(r.text)
+        try:
+            r = requests.get(f'https://dsg.xmldb-dev.northeastern.edu/basex/rest/psc/{edition}/{resource}',
+                            auth=(credentials['username'], credentials['password']), timeout=10)
+            r.raise_for_status()
+            with open(folder + resource, 'w', encoding='utf-8') as f:
+                f.write(r.text)
+        except requests.exceptions.HTTPError as http_error:
+            print("HTTP error:", http_error)
+            raise
+        except requests.exceptions.ConnectionError as conn_error:
+            print("Connection error:", conn_error)
+            raise
+        except requests.exceptions.Timeout as time_error:
+            print("Timeout error:", time_error)
+            raise
+        except requests.exceptions.RequestException as error:
+            print("General error:", error)
+            raise
+
 
 def extract(args):
     ''' function to run extraction from dsg db '''
