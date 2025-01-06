@@ -66,6 +66,13 @@ def create_adj_matrix(df, weight):
     a target in a letter with multiple targets. That means that when we process 
     the pd.crosstab for the targets, there is no singular target column to add
     to the refs column.
+
+    1/6/25 Update is that this is too complicated to handle with all of the 
+    edge cases on whether there are multiple authors, multiple targets, and no 
+    authors or no targets. I think it's best for the author and targets to stay
+    out of the co-reference counting. There's an argument for that anyway, in the
+    sense that the source and the target aren't technically being referenced within
+    the entry.
     '''
     
     # df_target = df.copy(deep=True)
