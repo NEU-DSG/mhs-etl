@@ -39,9 +39,8 @@ def create_dataframe(files, log):
 
 def create_adj_matrix(df, weight):
     ''' Creates the adjacency matrix from the dataframe '''
-    # Filter dates by distribution.
+    # Filter dates by unknown people
     df = df.query('(people != "u") & (people != "source")') 
-        #.query('(date < "1800-01-01") | (date >= "1830-01-01")')
 
     # Create adjacency matrix.
     adj = pd.crosstab(df['entry'], df['people'])
