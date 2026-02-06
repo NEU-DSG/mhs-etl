@@ -47,8 +47,9 @@ def create_umbrella_to_topics(folder_path):
         all_topics_from_api.append(topic["topic_name"])
 
         # If umbrella, adds the topic to the umbrellas list
-        if topic['is_umbrella'] == "1":
+        if topic['is_umbrella'] == 1:
             all_umbrellas_from_api.append(topic['topic_name'])
+    print(all_topics_from_api)
 
     # Topics that fall under a particular umbrella
     api_topics_with_umbrellas = []
@@ -65,6 +66,8 @@ def create_umbrella_to_topics(folder_path):
 
         # Keeps track of what topics are under what umbrella
         umbrella_to_topic_dict[umbrella] = topics_list
+    
+    print(all_umbrellas_from_api)
 
     # Gets a set of all topics that do not fall under an umbrella
     api_topics_no_umb = set(all_topics_from_api) - set(api_topics_with_umbrellas)
