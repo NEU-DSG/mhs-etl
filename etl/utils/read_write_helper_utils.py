@@ -4,6 +4,43 @@ import json
 from datetime import datetime
 import re
 import requests
+import xml.etree.ElementTree as ET
+
+def get_tei_date(xml_file):
+    """Extract the creation date from a CMS/RBT XML file."""
+    try:
+        root = ET.parse(xml_file).getroot()
+        ns_match = re.match(r"\{(.*)}", root.tag)
+        if not ns_match:
+            return None
+        ns = {"ns": ns_match.group(1)}
+        date_elem = root.find('.//ns:date/[@type="creation"]', ns)
+        if date_elem is None:
+            return None
+        return date_elem.get("when") or date_elem.get("notBefore")
+    except ET.ParseError:
+        return None
+ 
+ 
+def grab_files_month_cms_rbt(folder, start_date_str, end_date_str):
+    """Return XML files whose creation date falls within start–end range (YYYY or YYYY-MM)."""
+    files = []
+    # Accept both YYYY and YYYY-MM: YYYY expands to -01 for start, -12 for end. This is for both RBT and CMS
+    start = datetime.strptime(start_date_str if "-" in start_date_str else start_date_str + "-01", "%Y-%m")
+    end = datetime.strptime(end_date_str if "-" in end_date_str else end_date_str + "-12", "%Y-%m")
+ 
+    for dirpath, _, filenames in os.walk(folder):
+        for fname in sorted(f for f in filenames if f.endswith(".xml")):
+            path = os.path.join(dirpath, fname)
+            date_str = get_tei_date(path)
+            if not date_str:
+                continue
+            date_str = date_str[:7] if len(date_str) >= 7 else date_str + "-01"
+            date = datetime.strptime(date_str, "%Y-%m")
+            if start <= date <= end:
+                files.append(path)
+ 
+    return files
 
 def grab_files(folder, start_year, end_year):
     '''Takes in the folder for the XML docs and how many xml documents you would like to use.'''

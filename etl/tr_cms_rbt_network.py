@@ -6,7 +6,7 @@ import numpy as np
 
 from etl.utils.cms_rbt_parser import build_dataframe
 from etl.utils.network_helper_utils import createGraphObject
-from etl.utils.read_write_helper_utils import grab_files_onefolder, save, network_add_names
+from etl.utils.read_write_helper_utils import grab_files_month_cms_rbt, save, network_add_names
 
 def create_dataframe(files, log):
     '''
@@ -139,9 +139,11 @@ def create_adj_matrix(df, weight):
 def network_transform(args):
     ''' Function to run network transform '''
     log = {}
+    log['start_month_year'] = args['start']
+    log['end_month_year'] = args['end']
     log['weight_min'] = str(int(args['weight']) + 1)
     print('Grabbing files')
-    files = grab_files_onefolder(args['input'])
+    files = grab_files_month_cms_rbt(args['input'], args['start'], args['end'])
     print('Creating Dataframe')
     df = create_dataframe(files, log)
     print('Creating Adjacency Matrix')
@@ -163,15 +165,11 @@ def main():
     Once this runs, you can start a server and check out the index.html file.
     '''
     parser = argparse.ArgumentParser(description='Create Network Graph')
-    parser.add_argument(
-        'folder',
-        help='The folder of MHS XML Files')
-    parser.add_argument(
-        'filename',
-        help='The output json filename')
-    parser.add_argument(
-        'weight',
-        help='Weight of filter for edges')
+    parser.add_argument('folder', help='The folder of MHS XML Files')
+    parser.add_argument('start_month_year', help='Start month-year (YYYY-MM)')
+    parser.add_argument('end_month_year', help='End month-year (YYYY-MM)')
+    parser.add_argument('filename', help='The output json filename')
+    parser.add_argument('weight', help='Weight of filter for edges')
     args = parser.parse_args()
     network_transform(vars(args))
 
