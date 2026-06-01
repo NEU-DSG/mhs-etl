@@ -17,7 +17,13 @@
         {"input": "data/extract/cms-05-27-26", "start": "1822", "end": "1835", "output": "data/transform/network/cms/1822-1835-cms-ref.json", "weight": 6}
     ],
     "network_rbt": [
-        {"input": "data/extract/rbt-05-27-26", "output": "data/transform/network/rbt.json", "weight": 1}
+        {"input": "data/extract/rbt-05-27-26", "start": "1777-03", "end": "1799-10", "output": "data/transform/network/rbt/1777-03-1799-10-rbt.json", "weight": 1},
+        {"input": "data/extract/rbt-05-27-26", "start": "1799-11", "end": "1815-12", "output": "data/transform/network/rbt/1799-11-1815-12-rbt.json", "weight": 1},
+        {"input": "data/extract/rbt-05-27-26", "start": "1816-01", "end": "1831-05", "output": "data/transform/network/rbt/1816-01-1831-05-rbt.json", "weight": 1},
+        {"input": "data/extract/rbt-05-27-26", "start": "1831-06", "end": "1833-08", "output": "data/transform/network/rbt/1831-06-1833-08-rbt.json", "weight": 1},
+        {"input": "data/extract/rbt-05-27-26", "start": "1833-09", "end": "1834-06", "output": "data/transform/network/rbt/1833-09-1834-06-rbt.json", "weight": 1},
+        {"input": "data/extract/rbt-05-27-26", "start": "1834-07", "end": "1857-02", "output": "data/transform/network/rbt/1834-07-1857-02-rbt.json", "weight": 2},
+        {"input": "data/extract/rbt-05-27-26", "start": "1857-03", "end": "1865-10", "output": "data/transform/network/rbt/1857-03-1865-10-rbt.json", "weight": 1}
     ],
     "subjects": [
         {"input": "data/extract/jqa-05-27-26", "edition": "jqa", "output": "data/transform/subject/jqa_subjects.csv"},

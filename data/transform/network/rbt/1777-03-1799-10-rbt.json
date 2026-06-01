@@ -1,0 +1,31 @@
+{
+    "metrics": {
+        "start_month_year": "1777-03",
+        "end_month_year": "1799-10",
+        "weight_min": "2",
+        "num_entries": "2",
+        "avg_entry_len": "28135.5",
+        "pers_ref_avg": "16.0",
+        "num_nodes": 1,
+        "num_edges": 0
+    },
+    "directed": false,
+    "multigraph": false,
+    "graph": {},
+    "nodes": [
+        {
+            "degree": 0,
+            "betweenness": 0.0,
+            "eigenvector": 1.0,
+            "degree_cent": 1,
+            "modularity": 0,
+            "id": "source",
+            "given_name": "source",
+            "middle_name": "",
+            "family_name": "",
+            "date_of_birth": "",
+            "date_of_death": ""
+        }
+    ],
+    "links": []
+}
